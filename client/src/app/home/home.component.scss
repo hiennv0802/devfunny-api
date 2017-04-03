@@ -1,0 +1,100 @@
+/*styles for home content only*/
+@import '../../styles/partials/variables';
+@import '../../styles/partials/mixins';
+@import '../../styles/partials/layout';
+/* --------------------------------
+Main content
+-------------------------------- */
+
+.cd-main-content {
+  padding: $header-height-small 5% 2em;
+  overflow: hidden;
+
+  &.sub-nav {
+    /* to be used if there is sub nav */
+    padding-top: $header-height-small + $secondary-nav-height-small;
+  }
+
+  &.sub-nav-hero {
+    /* to be used if there is hero image + subnav */
+    padding-top: 0;
+
+    &.secondary-nav-fixed {
+      margin-top: $secondary-nav-height-small;
+    }
+  }
+
+  p {
+    max-width: $L;
+    line-height: 1.6;
+    margin: 2em auto;
+    font-family: $secondary-font;
+    color: shade($color-4, 30%);
+  }
+
+  @include MQ(L) {
+    padding-top: $header-height;
+
+    &.sub-nav {
+      padding-top: $header-height + $secondary-nav-height;
+    }
+
+    &.sub-nav-hero.secondary-nav-fixed {
+      margin-top: $secondary-nav-height;
+    }
+
+    p {
+      font-size: 2.4rem;
+    }
+  }
+}
+
+
+/*
+  adjust the positioning of in-page links
+  http://nicolasgallagher.com/jump-links-and-viewport-positioning/
+*/
+
+.cd-main-content.sub-nav :target::before,
+.cd-main-content.sub-nav-hero :target::before {
+  display: block;
+    content: "";
+    margin-top: -$secondary-nav-height-small;
+    height: $secondary-nav-height-small;
+    visibility: hidden;
+
+    @include MQ(L) {
+      margin-top: -$secondary-nav-height;
+      height: $secondary-nav-height;
+    }
+}
+
+/* --------------------------------
+Intro Section
+-------------------------------- */
+
+.cd-hero {
+  /* vertically align its content */
+  display: table;
+  width: 100%;
+  margin-top: $header-height-small;
+  height: 300px;
+  /*background: url(../assets/img/cd-hero-background.jpg) no-repeat center center;*/
+  background-size: cover;
+
+  .cd-hero-content {
+    /* vertically align inside parent element */
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  @include MQ(M) {
+    height: 400px;
+  }
+
+  @include MQ(L) {
+    height: 600px;
+    margin-top: $header-height;
+  }
+}
