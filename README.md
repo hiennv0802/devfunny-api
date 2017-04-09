@@ -23,3 +23,27 @@ npm start
 ```
 
 **Server(nodejs)**
+
+Install yarn
+
+```
+npm install -g yarn
+```
+Install dependencies:
+```
+yarn
+```
+Set environment (vars):
+```
+cp .env.example .env
+```
+Start server:
+```
+# Start server
+yarn start
+
+or
+
+# Selectively set DEBUG env var to get logs
+DEBUG=dev-funny-api:* yarn start
+```
