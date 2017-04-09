@@ -2,12 +2,7 @@ import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 import config from '../../config/config';
-
-// sample user, used for authentication
-const user = {
-  username: 'react',
-  password: 'express'
-};
+import User from '../models/user.model';
 
 /**
  * Returns jwt token if valid username and password is provided
@@ -17,20 +12,37 @@ const user = {
  * @returns {*}
  */
 function login(req, res, next) {
-  // Ideally you'll fetch this from the db
-  // Idea here was to show how jwt works with simplicity
-  if (req.body.username === user.username && req.body.password === user.password) {
-    const token = jwt.sign({
-      username: user.username
-    }, config.jwtSecret);
-    return res.json({
-      token,
-      username: user.username
-    });
-  }
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
-  return next(err);
+  User.findOne({
+    username: req.body.username
+  }, function(errors, user) {
+
+    if (errors) throw errors;
+
+    if (!user) {
+      const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
+      return next(err);
+    }
+
+    user.comparePassword(req.body.password, function(err, isMatch) {
+      if (err) throw err;
+
+      if (isMatch) {
+        const token = jwt.sign({
+          username: user.username
+        }, config.jwtSecret);
+
+        return res.json({
+          token: token,
+          username: user.username
+        });
+      } else {
+        const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
+        return next(err);
+      }
+
+    });
+  });
 }
 
 /**
