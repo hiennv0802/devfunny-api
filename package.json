@@ -15,8 +15,7 @@
     "start:debug": "cross-env DEBUG=dev-funny-api:* yarn start",
     "build": "gulp",
     "lint": "esw *.js server config --color",
-    "lint:watch": "yarn lint -- --watch",
-    "precommit": "yarn lint && yarn test"
+    "lint:watch": "yarn lint -- --watch"
   },
   "repository": {
     "type": "git",
@@ -36,6 +35,7 @@
     "boilerplate"
   ],
   "dependencies": {
+    "bcrypt": "^1.0.2",
     "bluebird": "3.4.6",
     "body-parser": "1.15.2",
     "compression": "1.6.2",
@@ -51,9 +51,12 @@
     "http-status": "^0.2.0",
     "joi": "10.0.6",
     "jsonwebtoken": "7.1.9",
+    "jwt-simple": "^0.5.1",
     "method-override": "^2.3.5",
     "mongoose": "4.7.4",
     "morgan": "1.7.0",
+    "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
     "winston": "2.3.0"
   },
   "devDependencies": {

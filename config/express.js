@@ -3,6 +3,7 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import compress from 'compression';
+import passport from 'passport'
 import methodOverride from 'method-override';
 import cors from 'cors';
 import httpStatus from 'http-status';
@@ -27,6 +28,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compress());
 app.use(methodOverride());
+app.use(passport.initialize());
+
+require('./passport')(passport);
 
 // secure apps by setting various HTTP headers
 app.use(helmet());
