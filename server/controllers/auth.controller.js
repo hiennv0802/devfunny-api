@@ -5,7 +5,7 @@ import config from '../../config/config';
 import User from '../models/user.model';
 
 /**
- * Returns jwt token if valid username and password is provided
+ * Returns jwt token if valid email and password is provided
  * @param req
  * @param res
  * @param next
@@ -14,7 +14,7 @@ import User from '../models/user.model';
 function login(req, res, next) {
 
   User.findOne({
-    username: req.body.username
+    email: req.body.email
   }, function(errors, user) {
 
     if (errors) throw errors;
@@ -29,12 +29,12 @@ function login(req, res, next) {
 
       if (isMatch) {
         const token = jwt.sign({
-          username: user.username
+          email: user.email
         }, config.jwtSecret);
 
         return res.json({
           token: token,
-          username: user.username
+          email: user.email
         });
       } else {
         const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
