@@ -20,15 +20,10 @@ function get(req, res) {
   return res.json(req.user);
 }
 
-/**
- * Create new user
- * @property {string} req.body.username - The username of user.
- * @property {string} req.body.mobileNumber - The mobileNumber of user.
- * @returns {User}
- */
 function create(req, res, next) {
   const user = new User({
-    username: req.body.username,
+    name: req.body.name,
+    email: req.body.email,
     password: req.body.password
   });
 

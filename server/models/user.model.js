@@ -5,7 +5,11 @@ import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 
 const UserSchema = new mongoose.Schema({
-  username: {
+  name: {
+    type: String,
+    required: true
+  },
+  email: {
     type: String,
     required: true,
     index: {
