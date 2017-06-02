@@ -1,0 +1,8 @@
+{
+  "name": "Devfunny API documentation",
+  "version": "1.0.0",
+  "description": "Devfunny API documentation for development",
+  "template": {
+    "forceLanguage": "en"
+  }
+}

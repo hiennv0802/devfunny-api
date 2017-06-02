@@ -42,3 +42,9 @@ jspm_packages
 # dist
 /dist
 /dist/**
+
+/uploads
+/uploads/**
+
+/doc
+/doc/**
