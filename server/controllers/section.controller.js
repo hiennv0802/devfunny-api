@@ -1,11 +1,10 @@
-import jwt from 'jsonwebtoken';
+import Section from '../models/section.model';
 import multerStorage from './../../config/multer-storage';
-import Image from '../models/image.model';
 import mv from 'mv';
 
 const upload = multerStorage.single('file');
 
-function uploadImage(req, res, next) {
+function create(req, res, next) {
   upload(req, res, function(err) {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
@@ -19,31 +18,36 @@ function uploadImage(req, res, next) {
       if (!req.file) {
         res.json({ success: false, message: 'No file was selected' });
       } else {
-        const image = new Image({
-          originalname: req.file.originalname
+        const section = new Section({
+          name: req.body.name,
+          image: {
+            originalname: req.file.originalname
+          }
         });
-
-        let path = 'uploads/images/' + image.id + '/' + req.file.originalname;
-
+        let path = 'uploads/sections/' + section.id + '/' + req.file.originalname;
         mv(
           req.file.path,
           path,
           { mkdirp: true },
           function(err) {
-
           }
         );
-        image.path = path;
-
-        image.save()
-          .then(savedUser => res.json({
-            success: true,
-            image_id: image.id
-          }))
-          .catch(e => next(e));
+        section.image.path = path
+        section.save()
+          .then(savedSection => res.json(savedSection))
+          .catch(e => {
+            next(e)
+          });
       }
     }
   });
 }
 
-export default { uploadImage };
+function list(req, res, next) {
+  const { limit = 50, skip = 0 } = req.query;
+  Section.list({ limit, skip })
+    .then(sections => res.json(sections))
+    .catch(e => next(e));
+}
+
+export default { create, list };
