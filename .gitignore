@@ -48,3 +48,9 @@ jspm_packages
 
 /doc
 /doc/**
+
+# iml
+*.iml
+
+# idea folder
+.idea/
