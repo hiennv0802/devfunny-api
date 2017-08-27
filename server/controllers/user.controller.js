@@ -14,17 +14,31 @@ function get(req, res) {
 }
 
 function create(req, res, next) {
-  const user = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password
+
+  User.findOne({
+    email: req.body.email
+  }, function(errors, user) {
+    if (errors) throw errors;
+
+    if(user) {
+      return res.json({
+        errors: "User existed"
+      });
+    }
+
+    const newUser = new User({
+      email: req.body.email,
+      password: req.body.password
+    });
+
+    newUser.save()
+      .then(savedUser => res.json(savedUser))
+      .catch(e => {
+        next(e)
+      });
+
   });
 
-  user.save()
-    .then(savedUser => res.json(savedUser))
-    .catch(e => {
-      next(e)
-    });
 }
 
 function update(req, res, next) {
