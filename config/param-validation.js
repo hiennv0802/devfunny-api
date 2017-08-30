@@ -4,7 +4,6 @@ export default {
   // POST /api/users
   createUser: {
     body: {
-      name: Joi.string().required(),
       email: Joi.string().required().email(),
       password: Joi.string().required()
     }

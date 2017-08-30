@@ -14,7 +14,6 @@ router.route('/')
  * @apiGroup User
  * @apiName CreateUser
  *
- * @apiParam {String} name Name of user.
  * @apiParam {String} email Email of user.
  * @apiParam {String} password Password of user.
  *
@@ -24,7 +23,6 @@ router.route('/')
  * @apiSuccessExample {json} Success-Response:
  *  {
  *    "__v": 0,
- *    "name": "Bui Hien",
  *    "email": "hienbx94@gmail.com",
  *    "password": "$2a$10$ZQiDyDq92YBYCfe4sN/8G.sp5fUGKNECWOd/X0CPg3eMzZMFdfSi6",
  *    "_id": "593137c353afe608c64d800f",
