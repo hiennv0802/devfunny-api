@@ -15,7 +15,8 @@
     "start:debug": "cross-env DEBUG=dev-funny-api:* yarn start",
     "build": "gulp",
     "lint": "esw *.js server config --color",
-    "lint:watch": "yarn lint -- --watch"
+    "lint:watch": "yarn lint -- --watch",
+    "test": "cross-env NODE_ENV=test ./node_modules/.bin/mocha --ui bdd --reporter spec --colors --compilers js:babel-core/register server/tests --recursive"
   },
   "repository": {
     "type": "git",
