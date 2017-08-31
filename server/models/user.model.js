@@ -4,16 +4,28 @@ import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 
+const social_types = ['email', 'facebook', 'twitter'];
+
 const UserSchema = new mongoose.Schema({
-  name: {
+  displayName: {
     type: String
+  },
+  social_id: {
+    type: String,
+    default: null
+  },
+  social_type: {
+    type: String,
+    enum: social_types,
+    required: true
+  },
+  username:{
+    type: String,
+    index: { unique: true }
   },
   email: {
     type: String,
-    required: true,
-    index: {
-      unique: true
-    }
+    default: null
   },
   password: {
     type: String,
@@ -24,6 +36,15 @@ const UserSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+UserSchema.index(
+  {
+    email: 1,
+    social_id: 1,
+    social_type: 1
+  },
+  { unique: true }
+)
 
 UserSchema.pre('save', function (next) {
   var user = this;

@@ -26,5 +26,14 @@ export default {
       email: Joi.string().required().email(),
       password: Joi.string().required()
     }
+  },
+
+  // POST /api/register/signup
+  signup: {
+    body: {
+      social_type: Joi.string().required(),
+      email: Joi.string().required().email(),
+      password: Joi.string().required()
+    }
   }
 };
