@@ -12,7 +12,6 @@ import User from '../models/user.model';
  * @returns {*}
  */
 function login(req, res, next) {
-
   User.findOne({
     email: req.body.email
   }, function(errors, user) {
@@ -40,7 +39,6 @@ function login(req, res, next) {
         const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
         return next(err);
       }
-
     });
   });
 }
