@@ -1,6 +1,7 @@
 import express from 'express';
 import userRoutes from './user.route';
 import authRoutes from './auth.route';
+import registerRoutes from './register.route';
 import uploadRoutes from './upload.route';
 import sectionRoutes from './section.route';
 
@@ -10,16 +11,14 @@ router.get('/health-check', (req, res) =>
   res.send('OK')
 );
 
-// mount user routes at /users
 router.use('/users', userRoutes);
 
-// mount auth routes at /auth
 router.use('/auth', authRoutes);
 
-// mount user routes at /users
+router.use('/register', registerRoutes);
+
 router.use('/upload', uploadRoutes);
 
-// mount section routes at /sections
 router.use('/sections', sectionRoutes);
 
 export default router;
