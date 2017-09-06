@@ -33,7 +33,10 @@ function login(req, res, next) {
 
         return res.json({
           token: token,
-          user: user
+          username: user.username,
+          email: user.email,
+          social_type: user.social_type,
+          social_id: user.social_id
         });
       } else {
         const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
