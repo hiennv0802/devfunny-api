@@ -1,17 +1,17 @@
 language: node_js
 
 node_js:
-  - "4.8"
-  - "6.10"
-  - "7.6"
+  - "6"
+  - "7"
+  - "node"
 
 env:
-  - NODE_ENV=development
-  - PORT=4040
-  - JWT_SECRET=0a6b944d-d2fb-46fc-a85e-0295c986cd9f
-  - MONGOOSE_DEBUG=true
-  - MONGO_HOST=mongodb://localhost/dev-funny-development
-  - MONGO_PORT=27017
+  global:
+    - NODE_ENV=development PORT=4040
+    - JWT_SECRET=0a6b944d-d2fb-46fc-a85e-0295c986cd9f
+    - MONGOOSE_DEBUG=true
+    - MONGO_HOST=mongodb://localhost/dev-funny-development
+    - MONGO_PORT=27017
 
 services:
   - mongodb
@@ -22,6 +22,15 @@ cache:
 
 git:
   depth: 3
+
+before_install:
+  - npm install npm@5 -g
+  - npm cache verify
+  - npm prune
+  - npm update
+
+install:
+  - npm install
 
 script:
   - yarn run test
