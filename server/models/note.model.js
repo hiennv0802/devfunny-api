@@ -10,12 +10,12 @@ const NoteSchema = new mongoose.Schema({
     trim: true
   },
   user: {
-    type: Schema.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'User',
     required: true
   },
   section: {
-    type: Schema.ObjectId,
+    type: mongoose.Schema.ObjectId,
     ref: 'Section',
     required: true
   },

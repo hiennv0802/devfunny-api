@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 import Note from './note.model';
 
 const options = { discriminatorKey: 'kind' };
 
-const ImageNoteSchema = new mongoose.Schema({
+const ImageNoteSchema = new Schema({
   image: {
     type: Schema.ObjectId,
     ref: 'Image',
