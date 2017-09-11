@@ -4,6 +4,7 @@ import authRoutes from './auth.route';
 import registerRoutes from './register.route';
 import uploadRoutes from './upload.route';
 import sectionRoutes from './section.route';
+import noteRoutes from './note.route';
 
 const router = express.Router();
 
@@ -20,5 +21,7 @@ router.use('/register', registerRoutes);
 router.use('/upload', uploadRoutes);
 
 router.use('/sections', sectionRoutes);
+
+router.use('/notes', noteRoutes);
 
 export default router;

@@ -28,7 +28,9 @@ function login(req, res, next) {
 
       if (isMatch) {
         const token = jwt.sign({
-          email: user.email
+          _id: user._id,
+          email: user.email,
+          username: user.username
         }, config.jwtSecret);
 
         return res.json({

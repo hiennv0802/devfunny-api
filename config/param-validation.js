@@ -35,5 +35,14 @@ export default {
       email: Joi.string().required().email(),
       password: Joi.string().required()
     }
+  },
+
+  // POST /api/notes
+  createImageNote : {
+    body: {
+      imageId: Joi.string().hex().required(),
+      sectionName: Joi.string().required(),
+      title: Joi.string().required()
+    }
   }
 };
