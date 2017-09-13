@@ -1,6 +1,7 @@
 import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 import ImageNote from '../models/image-note.model';
+import Note from '../models/note.model';
 import Section from '../models/section.model'
 import Image from '../models/image.model'
 
@@ -44,4 +45,11 @@ function create(req, res, next) {
 
 }
 
-export default { create };
+function list(req, res, next) {
+  const { limit = 50, skip = 0 } = req.query;
+  Note.list({ limit, skip })
+    .then(notes => res.json(notes))
+    .catch(e => next(e));
+}
+
+export default { create, list };

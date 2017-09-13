@@ -20,21 +20,9 @@ function uploadImage(req, res, next) {
         res.json({ success: false, message: 'No file was selected' });
       } else {
         const image = new Image({
-          originalname: req.file.originalname
+          originalname: req.file.originalname,
+          path: req.file.url
         });
-
-        let path = 'uploads/images/' + image.id + '/' + req.file.originalname;
-
-        mv(
-          req.file.path,
-          path,
-          { mkdirp: true },
-          function(err) {
-
-          }
-        );
-        image.path = path;
-
         image.save()
           .then(savedUser => res.json({
             success: true,

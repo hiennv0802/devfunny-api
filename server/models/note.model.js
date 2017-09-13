@@ -25,4 +25,15 @@ const NoteSchema = new mongoose.Schema({
   }
 }, options);
 
+NoteSchema.statics = {
+  list({ skip = 0, limit = 50 } = {}) {
+    return this.find()
+      .populate('image')
+      .sort({ createdAt: -1 })
+      .skip(+skip)
+      .limit(+limit)
+      .exec();
+  }
+};
+
 export default mongoose.model('Note', NoteSchema);

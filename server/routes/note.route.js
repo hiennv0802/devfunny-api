@@ -8,6 +8,8 @@ import config from '../../config/config';
 const router = express.Router();
 
 router.route('/')
+  .get(noteCtrl.list)
+
   .post(expressJwt({ secret: config.jwtSecret }),
     validate(paramValidation.createImageNote), noteCtrl.create);
 
