@@ -1,6 +1,6 @@
 import express from 'express';
 import validate from 'express-validation';
-import paramValidation from '../../config/param-validation';
+import paramValidation from '../../config/lib/param-validation';
 import registerCtrl from '../controllers/register.controller';
 import config from '../../config/config';
 

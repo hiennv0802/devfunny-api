@@ -31,4 +31,5 @@ install:
   - npm install
 
 script:
-  - yarn run test
+  - npm install
+  # - npm run ci:travis

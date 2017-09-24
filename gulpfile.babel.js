@@ -3,8 +3,17 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import path from 'path';
 import del from 'del';
 import runSequence from 'run-sequence';
+import semver from 'semver';
+
+require('dotenv').load();
+
+var defaultAssets = require('./config/assets/default');
 
 const plugins = gulpLoadPlugins();
+
+gulp.task('env:test', function () {
+  process.env.NODE_ENV = 'test';
+});
 
 const paths = {
   js: ['./**/*.js', '!dist/**', '!client/**', '!node_modules/**', '!coverage/**'],
@@ -40,14 +49,18 @@ gulp.task('babel', () =>
 );
 
 // Start server with restart on file changes
-gulp.task('nodemon', ['copy', 'babel'], () =>
-  plugins.nodemon({
-    script: path.join('dist', 'index.js'),
+gulp.task('nodemon', ['copy', 'babel'], () => {
+  var debugArgument = semver.satisfies(process.versions.node, '>=7.0.0') ? '--inspect' : '--debug';
+
+  return plugins.nodemon({
+    script: path.join('dist', 'server.js'),
+    nodeArgs: [debugArgument],
     ext: 'js',
+    verbose: true,
     ignore: ['node_modules/**/*.js', 'dist/**/*.js', 'doc/**'],
     tasks: ['copy', 'babel']
   })
-);
+});
 
 // gulp serve for development
 gulp.task('serve', ['clean'], () => runSequence('nodemon'));
@@ -57,4 +70,68 @@ gulp.task('default', ['clean'], () => {
   runSequence(
     ['copy', 'babel']
   );
+});
+
+// Drops the MongoDB database, used in e2e testing
+gulp.task('dropdb', function (done) {
+  // Use mongoose configuration
+  var mongooseService = require('./config/lib/mongoose');
+
+  mongooseService.connect(function (db) {
+    db.dropDatabase(function (err) {
+      if (err) {
+        console.error(err);
+      } else {
+        console.log('Successfully dropped db: ', db.databaseName);
+      }
+
+      mongooseService.disconnect(done);
+    });
+  });
+});
+
+// Mocha tests task
+gulp.task('mocha', function (done) {
+  var mongooseService = require('./config/lib/mongoose');
+  var testSuites = defaultAssets.server.tests;
+  var error;
+
+  var mongoose = require('mongoose');
+
+  mongoose.models = {};
+  mongoose.modelSchemas = {};
+  mongoose.connection.close();
+
+  // Connect mongoose
+  mongooseService.connect(function (db) {
+    // Load mongoose models
+    mongooseService.loadModels();
+
+    gulp.src(testSuites)
+      .pipe(plugins.mocha({
+        ui: 'bdd',
+        reporter: 'spec',
+        timeout: 10000,
+        compilers: 'js:babel-core/register'
+      }))
+      .on('error', function (err) {
+        // If an error occurs, save it
+        error = err;
+        console.log(error);
+      })
+      .on('end', function () {
+        mongooseService.disconnect(function (err) {
+          if (err) {
+            console.log('Error disconnecting from database');
+            console.log(err);
+          }
+
+          return done(error);
+        });
+      });
+  });
+});
+
+gulp.task('test:server', ['clean'], function (done) {
+  runSequence('env:test', 'dropdb', ['copy', 'babel'], 'mocha', done);
 });
