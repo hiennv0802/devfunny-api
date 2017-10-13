@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import request from 'supertest-as-promised';
 import httpStatus from 'http-status';
 import chai, { expect } from 'chai';
@@ -6,14 +5,6 @@ import app from '../../../server';
 import User from '../../models/user.model';
 
 chai.config.includeStack = true;
-
-after((done) => {
-  // required because https://github.com/Automattic/mongoose/issues/1251#issuecomment-65793092
-  mongoose.models = {};
-  mongoose.modelSchemas = {};
-  mongoose.connection.close();
-  done();
-});
 
 describe('## Signup with email APIs', () => {
   let user = {

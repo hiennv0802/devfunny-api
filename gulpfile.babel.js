@@ -16,9 +16,8 @@ gulp.task('env:test', function () {
 });
 
 const paths = {
-  js: ['./**/*.js', '!dist/**', '!client/**', '!node_modules/**', '!coverage/**'],
-  nonJs: ['./package.json', './.gitignore', './.env'],
-  tests: './server/tests/*.js'
+  js: ['./**/*.js', '!server/tests/**', '!dist/**', '!client/**', '!node_modules/**', '!coverage/**'],
+  nonJs: ['./package.json', './.gitignore', './.env']
 };
 
 // Clean up dist and coverage directory
@@ -57,7 +56,7 @@ gulp.task('nodemon', ['copy', 'babel'], () => {
     nodeArgs: [debugArgument],
     ext: 'js',
     verbose: true,
-    ignore: ['node_modules/**/*.js', 'dist/**/*.js', 'doc/**'],
+    ignore: ['node_modules/**/*.js', 'dist/**/*.js', 'doc/**', 'gulpfile.babel.js'],
     tasks: ['copy', 'babel']
   })
 });
@@ -104,8 +103,6 @@ gulp.task('mocha', function (done) {
 
   // Connect mongoose
   mongooseService.connect(function (db) {
-    // Load mongoose models
-    mongooseService.loadModels();
 
     gulp.src(testSuites)
       .pipe(plugins.mocha({
@@ -125,13 +122,14 @@ gulp.task('mocha', function (done) {
             console.log('Error disconnecting from database');
             console.log(err);
           }
-
-          return done(error);
+          done(error);
+          return process.exit();
         });
+
       });
   });
 });
 
-gulp.task('test:server', ['clean'], function (done) {
-  runSequence('env:test', 'dropdb', ['copy', 'babel'], 'mocha', done);
+gulp.task('test:server', function (done) {
+  runSequence('env:test', 'dropdb', 'mocha', done);
 });
