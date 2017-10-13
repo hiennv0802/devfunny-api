@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import multerStorage from './../../config/multer-storage';
+import multerStorage from './../../config/lib/multer-storage';
 import Image from '../models/image.model';
 import mv from 'mv';
 

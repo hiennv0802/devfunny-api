@@ -1,7 +1,7 @@
 import express from 'express';
 import validate from 'express-validation';
 import expressJwt from 'express-jwt';
-import paramValidation from '../../config/param-validation';
+import paramValidation from '../../config/lib/param-validation';
 import authCtrl from '../controllers/auth.controller';
 import config from '../../config/config';
 

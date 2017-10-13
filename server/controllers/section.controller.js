@@ -1,5 +1,5 @@
 import Section from '../models/section.model';
-import multerStorage from './../../config/multer-storage';
+import multerStorage from './../../config/lib/multer-storage';
 import mv from 'mv';
 
 const upload = multerStorage.single('file');
@@ -21,18 +21,10 @@ function create(req, res, next) {
         const section = new Section({
           name: req.body.name,
           image: {
-            originalname: req.file.originalname
+            originalname: req.file.originalname,
+            path: req.file.url
           }
         });
-        let path = 'uploads/sections/' + section.id + '/' + req.file.originalname;
-        mv(
-          req.file.path,
-          path,
-          { mkdirp: true },
-          function(err) {
-          }
-        );
-        section.image.path = path
         section.save()
           .then(savedSection => res.json(savedSection))
           .catch(e => {
