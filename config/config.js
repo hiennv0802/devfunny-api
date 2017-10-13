@@ -116,20 +116,11 @@ var initGlobalConfigFiles = function (config, assets) {
     server: {}
   };
 
-  // Setting Globbed mongoose model files
-  config.files.server.mongooseModels = getGlobbedPaths(assets.server.mongooseModels);
-
-  // Setting Globbed sequelize model files
-  config.files.server.sequelizeModels = getGlobbedPaths(assets.server.sequelizeModels);
-
   // Setting Globbed route files
-  config.files.server.routes = getGlobbedPaths(assets.server.routes);
+  config.files.server.routes = assets.server.routes;
 
   // Setting Globbed config files
   config.files.server.configs = getGlobbedPaths(assets.server.config);
-
-  // Setting Globbed socket files
-  config.files.server.sockets = getGlobbedPaths(assets.server.sockets);
 
   // Setting Globbed policies files
   config.files.server.policies = getGlobbedPaths(assets.server.policies);

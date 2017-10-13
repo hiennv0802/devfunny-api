@@ -116,8 +116,9 @@ module.exports.initHelmetHeaders = function (app) {
  */
 module.exports.initModulesServerRoutes = function (app) {
   // Globbing routing files
+
   config.files.server.routes.forEach(function (routePath) {
-    app.use('/api', require(path.resolve(path.join('dist', routePath))));
+    app.use('/api', require(path.resolve(__dirname, routePath)));
   });
 };
 

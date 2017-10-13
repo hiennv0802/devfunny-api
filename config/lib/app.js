@@ -13,7 +13,7 @@ function seedDB() {
 }
 
 mongooseService.connect(function (db) {
-  mongooseService.loadModels(seedDB);
+  // mongooseService.loadModels(seedDB);
 });
 
 var app = express.init();
