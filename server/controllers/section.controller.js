@@ -18,11 +18,12 @@ function create(req, res, next) {
       if (!req.file) {
         res.json({ success: false, message: 'No file was selected' });
       } else {
+        let imagePath = process.env.NODE_ENV === 'production' ? req.file.url : req.file.path;
         const section = new Section({
           name: req.body.name,
           image: {
             originalname: req.file.originalname,
-            path: req.file.url
+            path: imagePath
           }
         });
         section.save()

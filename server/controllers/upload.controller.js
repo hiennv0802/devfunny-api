@@ -19,9 +19,10 @@ function uploadImage(req, res, next) {
       if (!req.file) {
         res.json({ success: false, message: 'No file was selected' });
       } else {
+        let imagePath = process.env.NODE_ENV === 'production' ? req.file.url : req.file.path;
         const image = new Image({
           originalname: req.file.originalname,
-          path: req.file.url
+          path: imagePath
         });
         image.save()
           .then(savedUser => res.json({

@@ -9,14 +9,14 @@ chai.config.includeStack = true;
 describe('## Signup with email APIs', () => {
   let user = {
     social_type: 'email',
-    username: 'hienbx94',
-    email: 'hienbx94@gmail.com',
+    username: 'test',
+    email: 'test@gmail.com',
     password: '11111111'
   };
 
   describe('# POST /api/register', () => {
-    beforeEach(function(done) {
-      User.remove({}, function (err) {
+    beforeEach((done) => {
+      User.remove({}, (err) => {
         if (err) throw err;
         done();
       });
@@ -37,16 +37,17 @@ describe('## Signup with email APIs', () => {
     });
 
     it('should report error with message - Email address already exists, when user existed', (done) => {
-      User.create(user);
-      request(app)
-        .post('/api/register')
-        .send(user)
-        .expect(httpStatus.CONFLICT)
-        .then((res) => {
-          expect(res.body.message).to.equal('Email address already exists');
-          done();
-        })
-        .catch(done);
+      User.create(user, (error, userNew) => {
+        request(app)
+          .post('/api/register')
+          .send(user)
+          .expect(httpStatus.CONFLICT)
+          .then((res) => {
+            expect(res.body.message).to.equal('Email address already exists');
+            done();
+          })
+          .catch(done);
+      });
     });
   });
 });
