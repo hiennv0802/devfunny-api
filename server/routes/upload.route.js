@@ -3,7 +3,7 @@ import expressJwt from 'express-jwt';
 import config from '../../config/config';
 import uploadCtrl from '../controllers/upload.controller';
 
-const router = express.Router();
+const router = express.Router(); // eslint-disable-line
 
 /**
  * @api {post} /api/upload/image Upload image

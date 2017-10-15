@@ -5,22 +5,21 @@ import crypto from 'crypto';
 import path from 'path';
 
 const storageLocal = multer.diskStorage({
-  destination: function (req, file, cb) {
-   const path = `uploads`;
-   mkdirp.sync(path, { opts: { mode: '0755'} });
-   cb(null, path);
+  destination: (req, file, cb) => {
+    const pathStorage = 'uploads';
+    mkdirp.sync(pathStorage, { opts: { mode: '0755' } });
+    cb(null, pathStorage);
   },
-  filename: function(req, file, cb) {
-   if (!file.originalname.match(/\.(png|jpeg|jpg|gif)$/)) {
-     const err = new Error();
-     err.code = 'filetype';
-     return cb(err);
-   } else {
-     crypto.pseudoRandomBytes(16, function (err, raw) {
-       if (err) return cb(err)
-       cb(null, raw.toString('hex') + path.extname(file.originalname))
-     })
-   }
+  filename: (req, file, cb) => {
+    if (!file.originalname.match(/\.(png|jpeg|jpg|gif)$/)) {
+      const err = new Error();
+      err.code = 'filetype';
+      return cb(err);
+    }
+    return crypto.pseudoRandomBytes(16, (err, raw) => {
+      if (err) return cb(err);
+      return cb(null, raw.toString('hex') + path.extname(file.originalname));
+    });
   }
 });
 
@@ -32,10 +31,8 @@ const storageAzure = new MulterAzureStorage({
   containerSecurity: 'blob'
 });
 
-let storage = process.env.NODE_ENV === 'production' ? storageAzure : storageLocal;
-
 const multerStorage = multer({
-  storage: storage,
+  storage: process.env.NODE_ENV === 'production' ? storageAzure : storageLocal,
   limits: { fieldSize: 10 * 1024 * 1024 }
 });
 

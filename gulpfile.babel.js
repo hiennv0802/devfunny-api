@@ -7,11 +7,11 @@ import semver from 'semver';
 
 require('dotenv').load();
 
-var defaultAssets = require('./config/assets/default');
+const defaultAssets = require('./config/assets/default');
 
 const plugins = gulpLoadPlugins();
 
-gulp.task('env:test', function () {
+gulp.task('env:test', () => {
   process.env.NODE_ENV = 'test';
 });
 
@@ -49,7 +49,7 @@ gulp.task('babel', () =>
 
 // Start server with restart on file changes
 gulp.task('nodemon', ['copy', 'babel'], () => {
-  var debugArgument = semver.satisfies(process.versions.node, '>=7.0.0') ? '--inspect' : '--debug';
+  const debugArgument = semver.satisfies(process.versions.node, '>=7.0.0') ? '--inspect' : '--debug';
 
   return plugins.nodemon({
     script: path.join('dist', 'server.js'),
@@ -58,7 +58,7 @@ gulp.task('nodemon', ['copy', 'babel'], () => {
     verbose: true,
     ignore: ['node_modules/**/*.js', 'dist/**/*.js', 'doc/**', 'gulpfile.babel.js'],
     tasks: ['copy', 'babel']
-  })
+  });
 });
 
 // gulp serve for development
@@ -72,16 +72,16 @@ gulp.task('default', ['clean'], () => {
 });
 
 // Drops the MongoDB database, used in e2e testing
-gulp.task('dropdb', function (done) {
+gulp.task('dropdb', (done) => {
   // Use mongoose configuration
-  var mongooseService = require('./config/lib/mongoose');
+  var mongooseService = require('./config/lib/mongoose'); // eslint-disable-line
 
-  mongooseService.connect(function (db) {
-    db.dropDatabase(function (err) {
+  mongooseService.connect((db) => {
+    db.dropDatabase((err) => {
       if (err) {
-        console.error(err);
+        console.error(err); // eslint-disable-line
       } else {
-        console.log('Successfully dropped db: ', db.databaseName);
+        console.log('Successfully dropped db: ', db.databaseName); // eslint-disable-line
       }
 
       mongooseService.disconnect(done);
@@ -90,20 +90,13 @@ gulp.task('dropdb', function (done) {
 });
 
 // Mocha tests task
-gulp.task('mocha', function (done) {
-  var mongooseService = require('./config/lib/mongoose');
-  var testSuites = defaultAssets.server.tests;
-  var error;
-
-  var mongoose = require('mongoose');
-
-  mongoose.models = {};
-  mongoose.modelSchemas = {};
-  mongoose.connection.close();
+gulp.task('mocha', (done) => {
+  const mongooseService = require('./config/lib/mongoose'); // eslint-disable-line
+  const testSuites = defaultAssets.server.tests;
+  let error;
 
   // Connect mongoose
-  mongooseService.connect(function (db) {
-
+  mongooseService.connect(function (db) { // eslint-disable-line
     gulp.src(testSuites)
       .pipe(plugins.mocha({
         ui: 'bdd',
@@ -111,25 +104,24 @@ gulp.task('mocha', function (done) {
         timeout: 10000,
         compilers: 'js:babel-core/register'
       }))
-      .on('error', function (err) {
+      .on('error', (err) => {
         // If an error occurs, save it
         error = err;
-        console.log(error);
+        console.log(error); // eslint-disable-line
       })
-      .on('end', function () {
-        mongooseService.disconnect(function (err) {
+      .on('end', () => {
+        mongooseService.disconnect((err) => {
           if (err) {
-            console.log('Error disconnecting from database');
-            console.log(err);
+            console.log('Error disconnecting from database'); // eslint-disable-line
+            console.log(err); // eslint-disable-line
           }
           done(error);
           return process.exit();
         });
-
       });
   });
 });
 
-gulp.task('test:server', function (done) {
+gulp.task('test:server', (done) => {
   runSequence('env:test', 'dropdb', 'mocha', done);
 });

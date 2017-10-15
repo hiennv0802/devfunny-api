@@ -3,7 +3,7 @@ import validate from 'express-validation';
 import paramValidation from '../../config/lib/param-validation';
 import userCtrl from '../controllers/user.controller';
 
-const router = express.Router();
+const router = express.Router(); // eslint-disable-line
 
 router.route('/')
   .get(userCtrl.list)

@@ -7,7 +7,7 @@ import User from '../../models/user.model';
 chai.config.includeStack = true;
 
 describe('## Signin with email APIs', () => {
-  let user = {
+  const user = {
     social_type: 'email',
     username: 'test',
     email: 'test@gmail.com',
@@ -23,7 +23,7 @@ describe('## Signin with email APIs', () => {
     });
 
     it('should login success', (done) => {
-      User.create(user, (error, userNew) => {
+      User.create(user, () => {
         request(app)
           .post('/api/auth/login')
           .send(user)

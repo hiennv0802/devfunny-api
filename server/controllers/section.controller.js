@@ -1,11 +1,10 @@
 import Section from '../models/section.model';
 import multerStorage from './../../config/lib/multer-storage';
-import mv from 'mv';
 
 const upload = multerStorage.single('file');
 
 function create(req, res, next) {
-  upload(req, res, function(err) {
+  upload(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         res.json({ success: false, message: 'File size is too large. Max limit is 10MB' });
@@ -15,21 +14,20 @@ function create(req, res, next) {
         res.json({ success: false, message: err });
       }
     } else {
-      if (!req.file) {
+      if (!req.file) { // eslint-disable-line
         res.json({ success: false, message: 'No file was selected' });
       } else {
-        let imagePath = process.env.NODE_ENV === 'production' ? req.file.url : req.file.path;
         const section = new Section({
           name: req.body.name,
           image: {
             originalname: req.file.originalname,
-            path: imagePath
+            path: process.env.NODE_ENV === 'production' ? req.file.url : req.file.path
           }
         });
         section.save()
           .then(savedSection => res.json(savedSection))
-          .catch(e => {
-            next(e)
+          .catch((e) => {
+            next(e);
           });
       }
     }

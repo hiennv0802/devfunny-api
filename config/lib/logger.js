@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use strict';
 
 var _ = require('lodash'),
@@ -139,3 +140,4 @@ logger.getLogFormat = function getLogFormat() {
 logger.setupFileLogger();
 
 module.exports = logger;
+/* eslint-enable */

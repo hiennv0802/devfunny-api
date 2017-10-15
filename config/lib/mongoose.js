@@ -1,43 +1,42 @@
 import _ from 'lodash';
-import config from '../config';
 import chalk from 'chalk';
 import path from 'path';
 import mongoose from 'mongoose';
+import config from '../config';
 
-module.exports.loadModels = function(callback) {
-  config.files.server.mongooseModels.forEach(function (modelPath) {
-    require(path.resolve(path.join('dist', modelPath)));
+module.exports.loadModels = (callback) => {
+  config.files.server.mongooseModels.forEach((modelPath) => {
+    require(path.resolve(path.join('dist', modelPath))); // eslint-disable-line
   });
 
   if (callback) callback();
-}
+};
 
 // Initialize Mongoose
-module.exports.connect = function (callback) {
+module.exports.connect = (callback) => {
   mongoose.Promise = config.db.promise;
 
-  var options = _.merge(config.db.options || {}, { useMongoClient: true });
+  const options = _.merge(config.db.options || {}, { useMongoClient: true });
 
   mongoose
     .connect(config.db.uri, options)
-    .then(function (connection) {
+    .then((connection) => {
       // Enabling mongoose debug mode if required
       mongoose.set('debug', config.db.debug);
 
       // Call callback FN
       if (callback) callback(connection.db);
     })
-    .catch(function (err) {
-      console.error(chalk.red('Could not connect to MongoDB!'));
-      console.log(err);
+    .catch((err) => {
+      console.error(chalk.red('Could not connect to MongoDB!')); // eslint-disable-line
+      console.log(err); // eslint-disable-line
     });
-
 };
 
-module.exports.disconnect = function (cb) {
+module.exports.disconnect = (cb) => {
   mongoose.connection.db
-    .close(function (err) {
-      console.info(chalk.yellow('Disconnected from MongoDB.'));
+    .close((err) => {
+      console.info(chalk.yellow('Disconnected from MongoDB.')); // eslint-disable-line
       return cb(err);
     });
 };

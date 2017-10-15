@@ -3,7 +3,7 @@ import User from '../models/user.model';
 function load(req, res, next, id) {
   User.get(id)
     .then((user) => {
-      req.user = user;
+      req.user = user; // eslint-disable-line
       return next();
     })
     .catch(e => next(e));
@@ -14,15 +14,14 @@ function get(req, res) {
 }
 
 function create(req, res, next) {
-
   User.findOne({
     email: req.body.email
-  }, function(errors, user) {
+  }, (errors, user) => { // eslint-disable-line
     if (errors) throw errors;
 
-    if(user) {
+    if (user) {
       return res.json({
-        errors: "User existed"
+        errors: 'User existed'
       });
     }
 
@@ -33,12 +32,8 @@ function create(req, res, next) {
 
     newUser.save()
       .then(savedUser => res.json(savedUser))
-      .catch(e => {
-        next(e)
-      });
-
+      .catch(e => next(e));
   });
-
 }
 
 function update(req, res, next) {
