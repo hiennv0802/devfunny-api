@@ -5,14 +5,17 @@ node_js:
 
 env:
   global:
-    - NODE_ENV=development PORT=4040
+    - NODE_ENV=test PORT=4040
     - JWT_SECRET=0a6b944d-d2fb-46fc-a85e-0295c986cd9f
     - MONGOOSE_DEBUG=true
-    - MONGO_HOST=mongodb://localhost/dev-funny-development
+    - MONGO_HOST=mongodb://localhost/devfunny-test
     - MONGO_PORT=27017
 
 services:
   - mongodb
+
+notifications:
+  slack: devfunny:n4fDgITtfCGY7sWrqNceOVTR
 
 cache:
   directories:
@@ -32,4 +35,4 @@ install:
 
 script:
   - npm install
-  # - npm run ci:travis
+  - npm run ci:travis
