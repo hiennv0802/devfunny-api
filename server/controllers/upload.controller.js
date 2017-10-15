@@ -1,12 +1,10 @@
-import jwt from 'jsonwebtoken';
 import multerStorage from './../../config/lib/multer-storage';
 import Image from '../models/image.model';
-import mv from 'mv';
 
 const upload = multerStorage.single('file');
 
 function uploadImage(req, res, next) {
-  upload(req, res, function(err) {
+  upload(req, res, (err) => {
     if (err) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         res.json({ success: false, message: 'File size is too large. Max limit is 10MB' });
@@ -16,16 +14,15 @@ function uploadImage(req, res, next) {
         res.json({ success: false, message: err });
       }
     } else {
-      if (!req.file) {
+      if (!req.file) { // eslint-disable-line
         res.json({ success: false, message: 'No file was selected' });
       } else {
-        let imagePath = process.env.NODE_ENV === 'production' ? req.file.url : req.file.path;
         const image = new Image({
           originalname: req.file.originalname,
-          path: imagePath
+          path: process.env.NODE_ENV === 'production' ? req.file.url : req.file.path
         });
         image.save()
-          .then(savedUser => res.json({
+          .then(() => res.json({
             success: true,
             image_id: image.id
           }))

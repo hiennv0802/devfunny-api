@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 
-const social_types = ['email', 'facebook', 'twitter'];
+const socialTypes = ['email', 'facebook', 'twitter'];
 
 const UserSchema = new mongoose.Schema({
   displayName: {
@@ -16,10 +16,10 @@ const UserSchema = new mongoose.Schema({
   },
   social_type: {
     type: String,
-    enum: social_types,
+    enum: socialTypes,
     required: true
   },
-  username:{
+  username: {
     type: String,
     index: { unique: true }
   },
@@ -44,18 +44,18 @@ UserSchema.index(
     social_type: 1
   },
   { unique: true }
-)
+);
 
-UserSchema.pre('save', function (next) {
-  var user = this;
+UserSchema.pre('save', function (next) { // eslint-disable-line
+  const user = this;
   if (this.isModified('password') || this.isNew) {
-    bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.genSalt(10, (err, salt) => { // eslint-disable-line
       if (err) {
         return next(err);
       }
-      bcrypt.hash(user.password, salt, function (err, hash) {
-        if (err) {
-          return next(err);
+      bcrypt.hash(user.password, salt, (error, hash) => { // eslint-disable-line
+        if (error) {
+          return next(error);
         }
         user.password = hash;
         next();
@@ -66,12 +66,12 @@ UserSchema.pre('save', function (next) {
   }
 });
 
-UserSchema.methods.comparePassword = function (passw, cb) {
-  bcrypt.compare(passw, this.password, function (err, isMatch) {
+UserSchema.methods.comparePassword = function (passw, cb) { //eslint-disable-line
+  bcrypt.compare(passw, this.password, (err, isMatch) => {
     if (err) {
       return cb(err);
     }
-    cb(null, isMatch);
+    return cb(null, isMatch);
   });
 };
 

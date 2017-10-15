@@ -6,7 +6,7 @@ import uploadRoutes from './upload.route';
 import sectionRoutes from './section.route';
 import noteRoutes from './note.route';
 
-const router = express.Router();
+const router = express.Router(); // eslint-disable-line
 
 router.get('/health-check', (req, res) =>
   res.send('OK')

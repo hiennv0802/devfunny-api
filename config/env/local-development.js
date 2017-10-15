@@ -1,5 +1,4 @@
-'use strict';
-
+/* eslint-disable */
 // Rename this file to local-NODE_ENV.js (i.e. local-development.js, or local-test.js) for having a local configuration variables that
 // will not get commited and pushed to remote repositories.
 // Use it for your API keys, passwords, etc.
@@ -33,3 +32,4 @@ module.exports = {
   }
 };
 */
+/* eslint-enable */

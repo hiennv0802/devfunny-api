@@ -7,7 +7,7 @@ import User from '../../models/user.model';
 chai.config.includeStack = true;
 
 describe('## Signup with email APIs', () => {
-  let user = {
+  const user = {
     social_type: 'email',
     username: 'test',
     email: 'test@gmail.com',
@@ -37,7 +37,7 @@ describe('## Signup with email APIs', () => {
     });
 
     it('should report error with message - Email address already exists, when user existed', (done) => {
-      User.create(user, (error, userNew) => {
+      User.create(user, () => {
         request(app)
           .post('/api/register')
           .send(user)

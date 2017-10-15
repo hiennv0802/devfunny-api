@@ -7,7 +7,7 @@ import User from '../../models/user.model';
 chai.config.includeStack = true;
 
 describe('## Note APIs', () => {
-  let user = {
+  const user = {
     social_type: 'email',
     username: 'test',
     email: 'test@gmail.com',
@@ -34,27 +34,27 @@ describe('## Note APIs', () => {
     });
 
     it('should create Note success', (done) => {
-      User.create(user, (error, userNew) => {
+      User.create(user, () => {
         request(app)
           .post('/api/auth/login')
           .send(user)
           .then((res) => {
             request(app)
               .post('/api/upload/image')
-              .set('Authorization', 'Bearer ' + res.body.token)
+              .set('Authorization', `Bearer ${res.body.token}`)
               .attach('file', 'server/tests/section/images/test.png')
               .expect(httpStatus.OK)
               .then((resUpload) => {
                 request(app)
                   .post('/api/sections')
-                  .set('Authorization', 'Bearer ' + res.body.token)
+                  .set('Authorization', `Bearer ${res.body.token}`)
                   .field('name', 'memo')
                   .attach('file', 'server/tests/upload/images/test.png')
                   .expect(httpStatus.OK)
-                  .then((resSection) => {
+                  .then(() => {
                     request(app)
                       .post('/api/notes')
-                      .set('Authorization', 'Bearer ' + res.body.token)
+                      .set('Authorization', `Bearer ${res.body.token}`)
                       .send({
                         title: 'demo note',
                         sectionName: 'memo',
@@ -71,7 +71,6 @@ describe('## Note APIs', () => {
                   .catch(done);
               })
               .catch(done);
-
           })
           .catch(done);
       });

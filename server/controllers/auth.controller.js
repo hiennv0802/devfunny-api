@@ -14,8 +14,7 @@ import User from '../models/user.model';
 function login(req, res, next) {
   User.findOne({
     email: req.body.email
-  }, function(errors, user) {
-
+  }, (errors, user) => {
     if (errors) throw errors;
 
     if (!user) {
@@ -23,7 +22,7 @@ function login(req, res, next) {
       return next(err);
     }
 
-    user.comparePassword(req.body.password, function(err, isMatch) {
+    return user.comparePassword(req.body.password, (err, isMatch) => {
       if (err) throw err;
 
       if (isMatch) {
@@ -34,16 +33,15 @@ function login(req, res, next) {
         }, config.jwtSecret);
 
         return res.json({
-          token: token,
+          token: token, // eslint-disable-line
           username: user.username,
           email: user.email,
           social_type: user.social_type,
           social_id: user.social_id
         });
-      } else {
-        const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
-        return next(err);
       }
+      const errAuth = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
+      return next(errAuth);
     });
   });
 }

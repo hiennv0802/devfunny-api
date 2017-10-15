@@ -7,7 +7,7 @@ import User from '../../models/user.model';
 chai.config.includeStack = true;
 
 describe('## Upload APIs', () => {
-  let user = {
+  const user = {
     social_type: 'email',
     username: 'test',
     email: 'test@gmail.com',
@@ -34,17 +34,17 @@ describe('## Upload APIs', () => {
     });
 
     it('should report error with message - No file was selected', (done) => {
-      User.create(user, (error, userNew) => {
+      User.create(user, () => {
         request(app)
           .post('/api/auth/login')
           .send(user)
           .then((res) => {
             request(app)
               .post('/api/upload/image')
-              .set('Authorization', 'Bearer ' + res.body.token)
+              .set('Authorization', `Bearer ${res.body.token}`)
               .expect(httpStatus.OK)
-              .then((res) => {
-                expect(res.body.message).to.equal('No file was selected');
+              .then((resUpload) => {
+                expect(resUpload.body.message).to.equal('No file was selected');
                 done();
               })
               .catch(done);
@@ -54,19 +54,19 @@ describe('## Upload APIs', () => {
     });
 
     it('should upload image success and return image_id', (done) => {
-      User.create(user, (error, userNew) => {
+      User.create(user, () => {
         request(app)
           .post('/api/auth/login')
           .send(user)
           .then((res) => {
             request(app)
               .post('/api/upload/image')
-              .set('Authorization', 'Bearer ' + res.body.token)
+              .set('Authorization', `Bearer ${res.body.token}`)
               .attach('file', 'server/tests/section/images/test.png')
               .expect(httpStatus.OK)
-              .then((res) => {
-                expect(res.body.success).to.equal(true);
-                expect(res.body).to.have.property('image_id');
+              .then((resUpload) => {
+                expect(resUpload.body.success).to.equal(true);
+                expect(resUpload.body).to.have.property('image_id');
                 done();
               })
               .catch(done);

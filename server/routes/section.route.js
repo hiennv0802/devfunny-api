@@ -1,9 +1,9 @@
 import express from 'express';
-import sectionCtrl from '../controllers/section.controller';
 import expressJwt from 'express-jwt';
+import sectionCtrl from '../controllers/section.controller';
 import config from '../../config/config';
 
-const router = express.Router();
+const router = express.Router(); // eslint-disable-line
 
 router.route('/')
   .get(sectionCtrl.list)

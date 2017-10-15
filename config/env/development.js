@@ -1,10 +1,8 @@
-'use strict';
-
-var defaultEnvConfig = require('./default');
+import defaultEnvConfig from './default';
 
 module.exports = {
   db: {
-    uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/defunny-dev',
+    uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/defunny-dev', // eslint-disable-line
     options: {
       useMongoClient: true
     },
@@ -21,7 +19,7 @@ module.exports = {
     }
   },
   app: {
-    title: defaultEnvConfig.app.title + ' - Development Environment'
+    title: `${defaultEnvConfig.app.title} - Development Environment`
   },
   facebook: {
     clientID: process.env.FACEBOOK_ID || 'APP_ID',

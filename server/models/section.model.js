@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
-import Image from './image.model'
+import httpStatus from 'http-status';
+import Image from './image.model';
+import APIError from '../helpers/APIError';
 
 const SectionSchema = new mongoose.Schema({
   name: {

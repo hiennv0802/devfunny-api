@@ -1,32 +1,31 @@
-/**
- * Module dependencies.
- */
-import config from '../config';
 import express from 'express';
 import morgan from 'morgan';
 import expressWinston from 'express-winston';
-import winstonInstance from './winston';
-import logger from './logger';
 import bodyParser from 'body-parser';
-import session from 'express-session';
 import compress from 'compression';
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
-import hbs from 'express-hbs';
 import path from 'path';
 import _ from 'lodash';
-import cors from 'cors';
-import APIError from './APIError';
 import passport from 'passport';
 import httpStatus from 'http-status';
 import expressValidation from 'express-validation';
+import cors from 'cors';
+import config from '../config';
+import winstonInstance from './winston';
+import logger from './logger';
+import APIError from './APIError';
+
 require('./passport')(passport);
+
+// Initialize express app
+const app = express();
 
 /**
  * Initialize local variables
  */
-module.exports.initLocalVariables = (app) => {
+const initLocalVariables = () => {
   // Setting application local variables
   app.locals.title = config.app.title;
   app.locals.description = config.app.description;
@@ -41,9 +40,9 @@ module.exports.initLocalVariables = (app) => {
   app.locals.domain = config.domain;
 
   // Passing the request url to environment locals
-  app.use(function (req, res, next) {
-    res.locals.host = req.protocol + '://' + req.hostname;
-    res.locals.url = req.protocol + '://' + req.headers.host + req.originalUrl;
+  app.use((req, res, next) => {
+    res.locals.host = `${req.protocol}://${req.hostname}`; // eslint-disable-line
+    res.locals.url = `${req.protocol}://${req.headers.host}${req.originalUrl}`; // eslint-disable-line
     next();
   });
 };
@@ -51,7 +50,7 @@ module.exports.initLocalVariables = (app) => {
 /**
  * Initialize application middleware
  */
-module.exports.initMiddleware = (app) => {
+const initMiddleware = () => {
   // parse body params and attache them to req.body
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
@@ -87,18 +86,18 @@ module.exports.initMiddleware = (app) => {
 /**
  * Invoke modules server configuration
  */
-module.exports.initModulesConfiguration = function (app, db) {
-  config.files.server.configs.forEach(function (configPath) {
-    require(path.resolve(configPath))(app, db);
+const initModulesConfiguration = () => {
+  config.files.server.configs.forEach((configPath) => {
+    require(path.resolve(configPath))(app); // eslint-disable-line
   });
 };
 
 /**
  * Configure Helmet headers configuration
  */
-module.exports.initHelmetHeaders = function (app) {
+const initHelmetHeaders = () => {
   // Use helmet to secure Express headers
-  var SIX_MONTHS = 15778476000;
+  const SIX_MONTHS = 15778476000;
   app.use(helmet.frameguard());
   app.use(helmet.xssFilter());
   app.use(helmet.noSniff());
@@ -114,18 +113,18 @@ module.exports.initHelmetHeaders = function (app) {
 /**
  * Configure the modules server routes
  */
-module.exports.initModulesServerRoutes = function (app) {
+const initModulesServerRoutes = () => {
   // Globbing routing files
 
-  config.files.server.routes.forEach(function (routePath) {
-    app.use('/api', require(path.resolve(__dirname, routePath)));
+  config.files.server.routes.forEach((routePath) => {
+    app.use('/api', require(path.resolve(__dirname, routePath))); // eslint-disable-line
   });
 };
 
 /**
  * Configure error handling
  */
-module.exports.initErrorRoutes = function (app) {
+const initErrorRoutes = () => {
   app.use((err, req, res, next) => {
     if (err instanceof expressValidation.ValidationError) {
       // validation error contains errors which is an array of error each containing message[]
@@ -145,7 +144,7 @@ module.exports.initErrorRoutes = function (app) {
     return next(err);
   });
 
-  app.use((err, req, res, next) =>
+  app.use((err, req, res, next) => // eslint-disable-line
     res.status(err.status).json({
       message: err.isPublic ? err.message : httpStatus[err.status],
       stack: process.env.NODE_ENV === 'development' ? err.stack : {}
@@ -156,27 +155,24 @@ module.exports.initErrorRoutes = function (app) {
 /**
  * Initialize the Express application
  */
-module.exports.init = function () {
-  // Initialize express app
-  var app = express();
-
+module.exports.init = () => {
   // Initialize local variables
-  this.initLocalVariables(app);
+  initLocalVariables();
 
   // Initialize Express middleware
-  this.initMiddleware(app);
+  initMiddleware();
 
   // Initialize Helmet security headers
-  this.initHelmetHeaders(app);
+  initHelmetHeaders();
 
   // Initialize Modules configuration
-  this.initModulesConfiguration(app);
+  initModulesConfiguration();
 
   // Initialize modules server routes
-  this.initModulesServerRoutes(app);
+  initModulesServerRoutes();
 
   // Initialize error routes
-  this.initErrorRoutes(app);
+  initErrorRoutes();
 
   return app;
 };

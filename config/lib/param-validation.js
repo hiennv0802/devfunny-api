@@ -38,7 +38,7 @@ export default {
   },
 
   // POST /api/notes
-  createImageNote : {
+  createImageNote: {
     body: {
       imageId: Joi.string().hex().required(),
       sectionName: Joi.string().required(),
