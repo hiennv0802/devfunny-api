@@ -19,14 +19,10 @@ import APIError from './APIError';
 
 require('./passport')(passport);
 
-// Initialize express app
+/* eslint-disable global-require, no-param-reassign*/
 const app = express();
 
-/**
- * Initialize local variables
- */
 const initLocalVariables = () => {
-  // Setting application local variables
   app.locals.title = config.app.title;
   app.locals.description = config.app.description;
   if (config.secure && config.secure.ssl === true) {
@@ -39,19 +35,14 @@ const initLocalVariables = () => {
   app.locals.env = process.env.NODE_ENV;
   app.locals.domain = config.domain;
 
-  // Passing the request url to environment locals
   app.use((req, res, next) => {
-    res.locals.host = `${req.protocol}://${req.hostname}`; // eslint-disable-line
-    res.locals.url = `${req.protocol}://${req.headers.host}${req.originalUrl}`; // eslint-disable-line
+    res.locals.host = `${req.protocol}://${req.hostname}`;
+    res.locals.url = `${req.protocol}://${req.headers.host}${req.originalUrl}`;
     next();
   });
 };
 
-/**
- * Initialize application middleware
- */
 const initMiddleware = () => {
-  // parse body params and attache them to req.body
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -60,7 +51,6 @@ const initMiddleware = () => {
   app.use(methodOverride());
   app.use(cors());
 
-  // Enable logger (morgan) if enabled in the configuration file
   if (_.has(config, 'log.format')) {
     app.use(morgan(logger.getLogFormat(), logger.getMorganOptions()));
   }
@@ -70,9 +60,9 @@ const initMiddleware = () => {
     expressWinston.responseWhitelist.push('body');
     app.use(expressWinston.logger({
       winstonInstance,
-      meta: true, // optional: log meta data about request (defaults to true)
+      meta: true,
       msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-      colorStatus: true // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
+      colorStatus: true
     }));
   }
 
@@ -83,20 +73,7 @@ const initMiddleware = () => {
   }
 };
 
-/**
- * Invoke modules server configuration
- */
-const initModulesConfiguration = () => {
-  // config.files.server.configs.forEach((configPath) => {
-  //   require(path.resolve(configPath))(app); // eslint-disable-line
-  // });
-};
-
-/**
- * Configure Helmet headers configuration
- */
 const initHelmetHeaders = () => {
-  // Use helmet to secure Express headers
   const SIX_MONTHS = 15778476000;
   app.use(helmet.frameguard());
   app.use(helmet.xssFilter());
@@ -110,24 +87,15 @@ const initHelmetHeaders = () => {
   app.disable('x-powered-by');
 };
 
-/**
- * Configure the modules server routes
- */
 const initModulesServerRoutes = () => {
-  // Globbing routing files
-
   config.files.server.routes.forEach((routePath) => {
-    app.use('/api', require(path.resolve(__dirname, routePath))); // eslint-disable-line
+    app.use('/api', require(path.resolve(__dirname, routePath)));
   });
 };
 
-/**
- * Configure error handling
- */
 const initErrorRoutes = () => {
   app.use((err, req, res, next) => {
     if (err instanceof expressValidation.ValidationError) {
-      // validation error contains errors which is an array of error each containing message[]
       const unifiedErrorMessage = err.errors.map(error => error.messages.join('. ')).join(' and ');
       const error = new APIError(unifiedErrorMessage, err.status, true);
       return next(error);
@@ -138,7 +106,6 @@ const initErrorRoutes = () => {
     return next(err);
   });
 
-  // catch 404 and forward to error handler
   app.use((req, res, next) => {
     const err = new APIError('API not found', httpStatus.NOT_FOUND);
     return next(err);
@@ -152,27 +119,12 @@ const initErrorRoutes = () => {
   );
 };
 
-/**
- * Initialize the Express application
- */
 module.exports.init = () => {
-  // Initialize local variables
   initLocalVariables();
-
-  // Initialize Express middleware
   initMiddleware();
-
-  // Initialize Helmet security headers
   initHelmetHeaders();
-
-  // Initialize Modules configuration
-  initModulesConfiguration();
-
-  // Initialize modules server routes
   initModulesServerRoutes();
-
-  // Initialize error routes
   initErrorRoutes();
-
   return app;
 };
+/* eslint-enable global-require, no-param-reassign */
