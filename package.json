@@ -1,6 +1,7 @@
 {
-  "name": "dev-funny",
+  "name": "devfunny-api",
   "version": "1.0.0",
+  "devfunny-api-version": "1.0.0",
   "description": "Make something become adopted globally or internationally",
   "author": "devfunny team",
   "main": "index.js",

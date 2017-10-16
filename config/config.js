@@ -4,46 +4,7 @@ import fs from 'fs';
 import glob from 'glob';
 import chalk from 'chalk';
 
-/* eslint-disable no-param-reassign */
-const getGlobbedPaths = (globPatterns, excludes) => {
-  // URL paths regex
-  const urlRegex = new RegExp('^(?:[a-z]+:)?\/\/', 'i'); // eslint-disable-line
-
-  // The output array
-  let output = [];
-
-  // If glob pattern is array then we use each pattern in a recursive way, otherwise we use glob
-  if (_.isArray(globPatterns)) {
-    globPatterns.forEach((globPattern) => {
-      output = _.union(output, getGlobbedPaths(globPattern, excludes));
-    });
-  } else if (_.isString(globPatterns)) {
-    if (urlRegex.test(globPatterns)) {
-      output.push(globPatterns);
-    } else {
-      let files = glob.sync(globPatterns);
-      if (excludes) {
-        files = files.map((file) => {
-          if (_.isArray(excludes)) {
-            Object.keys(excludes).forEach((i) => {
-              if (Object.prototype.hasOwnProperty.call(excludes, i)) {
-                file = file.replace(excludes[i], ''); // eslint-disable-line
-              }
-            });
-          } else {
-            file = file.replace(excludes, ''); // eslint-disable-line
-          }
-          return file;
-        });
-      }
-      output = _.union(output, files);
-    }
-  }
-
-
-  return output;
-};
-
+/* eslint-disable global-require, no-param-reassign*/
 const validateEnvironmentVariable = () => {
   const environmentFiles = glob.sync(`./config/env/${process.env.NODE_ENV}.js`);
   console.log(); // eslint-disable-line
@@ -82,95 +43,33 @@ const validateSecureMode = (config) => {
   return true;
 };
 
-const validateSessionSecret = (config, testing) => {
-  if (process.env.NODE_ENV !== 'production') {
-    return true;
-  }
-
-  if (config.sessionSecret === 'MEAN') {
-    if (!testing) {
-      console.log(chalk.red('+ WARNING: It is strongly recommended that you change sessionSecret config while running in production!')); // eslint-disable-line
-      console.log(chalk.red('  Please add `sessionSecret: process.env.SESSION_SECRET || \'super amazing secret\'` to ')); // eslint-disable-line
-      console.log(chalk.red('  `config/env/production.js` or `config/env/local.js`')); // eslint-disable-line
-      console.log(); // eslint-disable-line
-    }
-    return false;
-  }
-  return true;
-};
-
-const initGlobalConfigFolders = (config) => {
-  // Appending files
-  config.folders = {
-    server: {}
-  };
-
-  // Setting globbed client paths
-  config.folders.client = `${process.cwd()}/public/`;
-};
-
 const initGlobalConfigFiles = (config, assets) => {
-  // Appending files
   config.files = {
     server: {}
   };
 
-  // Setting Globbed route files
   config.files.server.routes = assets.server.routes;
-
-  // Setting Globbed config files
-  config.files.server.configs = getGlobbedPaths(assets.server.config);
-
-  // Setting Globbed policies files
-  config.files.server.policies = getGlobbedPaths(assets.server.policies);
 };
 
 const initGlobalConfig = () => {
-  // Validate NODE_ENV existence
   validateEnvironmentVariable();
 
-  // Get the default assets
-  const assets = require('./assets/default'); // eslint-disable-line
+  const assets = require('./assets/default');
 
-  // Get the default config
-  const defaultConfig = require('./env/default'); // eslint-disable-line
+  const defaultConfig = require('./env/default');
 
-  // Get the current config
-  const environmentConfig = require('./env/' + process.env.NODE_ENV) || {}; // eslint-disable-line
+  const environmentConfig = require(`./env/${process.env.NODE_ENV}`) || {};
 
-  // Merge config files
-  let config = _.merge(defaultConfig, environmentConfig);
+  const config = _.merge(defaultConfig, environmentConfig);
+  const pkg = require(path.resolve('./package.json'));
+  config.devfunny = pkg;
 
-  // read package.json for MEAN.JS project information
-  var pkg = require(path.resolve('./package.json')); // eslint-disable-line
-  config.meanjs = pkg;
-
-  // Extend the config object with the local-NODE_ENV.js custom/local environment.
-  config = _.merge(config, (fs.existsSync(path.join(process.cwd(), `config/env/local-${process.env.NODE_ENV}.js`)) && require(path.join(process.cwd(), `config/env/local-${process.env.NODE_ENV}.js`))) || {}); // eslint-disable-line
-
-  // Initialize global globbed files
   initGlobalConfigFiles(config, assets);
-
-  // Initialize global globbed folders
-  initGlobalConfigFolders(config);
-
-  // Validate Secure SSL mode can be used
   validateSecureMode(config);
-
-  // Validate session secret
-  validateSessionSecret(config);
-
-  // Print a warning if config.domain is not set
   validateDomainIsSet(config);
-
-  // Expose configuration utilities
-  config.utils = {
-    getGlobbedPaths: getGlobbedPaths, // eslint-disable-line
-    validateSessionSecret: validateSessionSecret // eslint-disable-line
-  };
 
   return config;
 };
+/* eslint-enable global-require, no-param-reassign */
 
 module.exports = initGlobalConfig();
-/* eslint-enable no-param-reassign */

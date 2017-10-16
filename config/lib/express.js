@@ -87,9 +87,9 @@ const initMiddleware = () => {
  * Invoke modules server configuration
  */
 const initModulesConfiguration = () => {
-  config.files.server.configs.forEach((configPath) => {
-    require(path.resolve(configPath))(app); // eslint-disable-line
-  });
+  // config.files.server.configs.forEach((configPath) => {
+  //   require(path.resolve(configPath))(app); // eslint-disable-line
+  // });
 };
 
 /**
