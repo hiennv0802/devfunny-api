@@ -56,7 +56,7 @@ gulp.task('nodemon', ['copy', 'babel'], () => {
     nodeArgs: [debugArgument],
     ext: 'js',
     verbose: true,
-    ignore: ['node_modules/**/*.js', 'dist/**/*.js', 'doc/**', 'gulpfile.babel.js'],
+    ignore: ['node_modules/**/*.js', 'dist/**/*.js', 'doc/**', 'gulpfile.babel.js', 'uploads/*.png'],
     tasks: ['copy', 'babel']
   });
 });
