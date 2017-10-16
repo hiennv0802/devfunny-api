@@ -4,14 +4,10 @@ import config from '../config';
 import mongoose from './mongoose';
 import express from './express';
 
-mongoose.connect(() => {
-
-});
-
 const app = express.init();
+mongoose.connect();
 
 app.listen(config.port, config.host, () => {
-  /* eslint-disable no-console */
   const server = `${(process.env.NODE_ENV === 'secure' ? 'https://' : 'http://')}${config.host}:${config.port}`;
   console.log('--');
   console.log(chalk.green(config.app.title));
@@ -24,7 +20,6 @@ app.listen(config.port, config.host, () => {
     console.log(chalk.green(`Devfunny version:   ${config.devfunny['devfunny-api-version']}`));
   }
   console.log('--');
-  /* eslint-enable no-console */
 });
 
 export default app;

@@ -6,7 +6,7 @@ module.exports = {
     options: {
       useMongoClient: true
     },
-    debug: process.env.MONGODB_DEBUG || false
+    debug: process.env.MONGODB_DEBUG || true
   },
   log: {
     format: 'dev',
