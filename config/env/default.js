@@ -11,5 +11,5 @@ module.exports = {
   port: process.env.PORT || 4040,
   host: process.env.HOST || '0.0.0.0',
   domain: process.env.DOMAIN,
-  jwtSecret: process.env.JWT_SECRET || 'abhdichhadiefsfe'
+  jwtSecret: process.env.JWT_SECRET || 'jwtSecret'
 };

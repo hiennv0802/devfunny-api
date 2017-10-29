@@ -23,13 +23,17 @@ const storageLocal = multer.diskStorage({
   }
 });
 
-const storageAzure = new MulterAzureStorage({
-  azureStorageConnectionString: 'https://devfunny.blob.core.windows.net/',
-  azureStorageAccessKey: 'aLkpJ4bBpXx7Sqiz/UyqYfhqyN+DHuSX0j78+WIJI1rUSrI3PJKx6yuq8yxo8jedVOe41qlSOxDOKHHtz0iAWA==',
-  azureStorageAccount: 'devfunny',
-  containerName: 'devfunny',
-  containerSecurity: 'blob'
-});
+let storageAzure = null;
+
+if (process.env.NODE_ENV === 'production') {
+  storageAzure = new MulterAzureStorage({
+    azureStorageConnectionString: 'https://devfunny.blob.core.windows.net/',
+    azureStorageAccessKey: '41VgEplbKohcsF/xrcBVrJnddqcmxImKOcRQmRsMn+xwpDpsqLFLbaQDIyFaKbgLBnuxERxZVP6TxvuvnMv3gA==',
+    azureStorageAccount: 'devfunny',
+    containerName: 'devfunny',
+    containerSecurity: 'blob'
+  });
+}
 
 const multerStorage = multer({
   storage: process.env.NODE_ENV === 'production' ? storageAzure : storageLocal,

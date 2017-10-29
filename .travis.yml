@@ -1,15 +1,14 @@
 language: node_js
 
 node_js:
-  - "node"
+  - 8.6.0
 
 env:
   global:
-    - NODE_ENV=test PORT=4040
+    - NODE_ENV=test
+    - PORT=4040
     - JWT_SECRET=0a6b944d-d2fb-46fc-a85e-0295c986cd9f
-    - MONGOOSE_DEBUG=true
-    - MONGO_HOST=mongodb://localhost/devfunny-test
-    - MONGO_PORT=27017
+    - MONGODB_URI=mongodb://localhost:27017/devfunny-test
 
 services:
   - mongodb
@@ -27,6 +26,7 @@ git:
 before_install:
   - npm install npm@5 -g
   - npm cache verify
+  - npm install -g node-pre-gyp
   - npm prune
   - npm update
 
