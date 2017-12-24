@@ -1,48 +1,34 @@
-import fs from 'fs'; // eslint-disable-line
+import defaultEnvConfig from './default';
 
 module.exports = {
-  secure: {
-    ssl: true,
-    privateKey: './config/sslcerts/key.pem',
-    certificate: './config/sslcerts/cert.pem',
-    caBundle: './config/sslcerts/cabundle.crt'
-  },
-  port: process.env.PORT || 8443,
-  // Binding to 127.0.0.1 is safer in production.
-  host: process.env.HOST || '0.0.0.0',
   db: {
-    uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/defunny', // eslint-disable-line
+    uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/defunny-dev', // eslint-disable-line
     options: {
-      useMongoClient: true
-      /**
-        * Uncomment to enable ssl certificate based authentication to mongodb
-        * servers. Adjust the settings below for your specific certificate
-        * setup.
-      server: {
-        ssl: true,
-        sslValidate: false,
-        checkServerIdentity: false,
-        sslCA: fs.readFileSync('./config/sslcerts/ssl-ca.pem'),
-        sslCert: fs.readFileSync('./config/sslcerts/ssl-cert.pem'),
-        sslKey: fs.readFileSync('./config/sslcerts/ssl-key.pem'),
-        sslPass: '1234'
+      user: process.env.MONGODB_USER,
+      pass: process.env.MONGODB_PASS,
+      replset: {
+        rs_name: process.env.MONGODB_RS,
+        authSource: process.env.MONGODB_AUTH_SOURCE,
+        socketOptions: {
+          connectTimeoutMS: parseInt(process.env.MONGODB_SOCKET_TIMEOUT, 10),
+          keepAlive: parseInt(process.env.MONGODB_SOCKET_KEEP_ALIVE, 10)
+        }
       }
-      */
     },
-    // Enable mongoose debug mode
     debug: process.env.MONGODB_DEBUG || false
   },
   log: {
-    // logging with Morgan - https://github.com/expressjs/morgan
-    // Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
-    format: process.env.LOG_FORMAT || 'combined',
+    format: 'dev',
     fileLogger: {
-      directoryPath: process.env.LOG_DIR_PATH || process.cwd(),
-      fileName: process.env.LOG_FILE || 'app.log',
+      directoryPath: process.cwd(),
+      fileName: 'app.log',
       maxsize: 10485760,
       maxFiles: 2,
       json: false
     }
+  },
+  app: {
+    title: `${defaultEnvConfig.app.title}`
   },
   facebook: {
     clientID: process.env.FACEBOOK_ID || 'APP_ID',
@@ -74,7 +60,7 @@ module.exports = {
     clientID: process.env.PAYPAL_ID || 'CLIENT_ID',
     clientSecret: process.env.PAYPAL_SECRET || 'CLIENT_SECRET',
     callbackURL: '/api/auth/paypal/callback',
-    sandbox: false
+    sandbox: true
   },
   mailer: {
     from: process.env.MAILER_FROM || 'MAILER_FROM',
@@ -86,6 +72,7 @@ module.exports = {
       }
     }
   },
+  livereload: true,
   seedDB: {
     seed: process.env.MONGO_SEED === 'true',
     options: {
