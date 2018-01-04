@@ -4,16 +4,7 @@ module.exports = {
   db: {
     uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/defunny-dev', // eslint-disable-line
     options: {
-      user: process.env.MONGODB_USER,
-      pass: process.env.MONGODB_PASS,
-      replset: {
-        rs_name: process.env.MONGODB_RS,
-        authSource: process.env.MONGODB_AUTH_SOURCE,
-        socketOptions: {
-          connectTimeoutMS: parseInt(process.env.MONGODB_SOCKET_TIMEOUT, 10),
-          keepAlive: parseInt(process.env.MONGODB_SOCKET_KEEP_ALIVE, 10)
-        }
-      }
+      useMongoClient: true
     },
     debug: process.env.MONGODB_DEBUG || false
   },

@@ -2,7 +2,7 @@
   "name": "devfunny-api",
   "version": "1.0.0",
   "devfunny-api-version": "1.0.0",
-  "description": "Make something become adopted globally or internationally",
+  "description": "Made better or making something better",
   "author": "devfunny team",
   "main": "index.js",
   "private": true,
@@ -25,14 +25,7 @@
     "type": "git",
     "url": "git@github.com:hienbx94/dev-funny.git"
   },
-  "keywords": [
-    "express",
-    "node.js",
-    "mongoose",
-    "es6",
-    "REST",
-    "API"
-  ],
+  "keywords": ["express", "node.js", "mongoose", "es6", "REST", "API"],
   "dependencies": {
     "bcrypt": "1.0.2",
     "bluebird": "3.4.6",
@@ -109,12 +102,7 @@
     }
   },
   "babel": {
-    "presets": [
-      "es2015",
-      "stage-2"
-    ],
-    "plugins": [
-      "add-module-exports"
-    ]
+    "presets": ["es2015", "stage-2"],
+    "plugins": ["add-module-exports"]
   }
 }
