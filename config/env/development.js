@@ -3,9 +3,7 @@ import defaultEnvConfig from './default';
 module.exports = {
   db: {
     uri: process.env.MONGOHQ_URL || process.env.MONGODB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/defunny-dev', // eslint-disable-line
-    options: {
-      useMongoClient: true
-    },
+    options: {},
     debug: process.env.MONGODB_DEBUG || true
   },
   log: {

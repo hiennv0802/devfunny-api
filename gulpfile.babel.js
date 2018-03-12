@@ -16,7 +16,14 @@ gulp.task('env:test', () => {
 });
 
 const paths = {
-  js: ['./**/*.js', '!server/tests/**', '!dist/**', '!client/**', '!node_modules/**', '!coverage/**'],
+  js: [
+    './**/*.js',
+    '!server/tests/**',
+    '!dist/**',
+    '!client/**',
+    '!node_modules/**',
+    '!coverage/**'
+  ],
   nonJs: ['./package.json', './.gitignore', './.env']
 };
 
@@ -27,36 +34,49 @@ gulp.task('clean', () =>
 
 // Copy non-js files to dist
 gulp.task('copy', () =>
-  gulp.src(paths.nonJs)
+  gulp
+    .src(paths.nonJs)
     .pipe(plugins.newer('dist'))
     .pipe(gulp.dest('dist'))
 );
 
 // Compile ES6 to ES5 and copy to dist
 gulp.task('babel', () =>
-  gulp.src([...paths.js, '!gulpfile.babel.js'], { base: '.' })
+  gulp
+    .src([...paths.js, '!gulpfile.babel.js'], { base: '.' })
     .pipe(plugins.newer('dist'))
     .pipe(plugins.sourcemaps.init())
     .pipe(plugins.babel())
-    .pipe(plugins.sourcemaps.write('.', {
-      includeContent: false,
-      sourceRoot(file) {
-        return path.relative(file.path, __dirname);
-      }
-    }))
+    .pipe(
+      plugins.sourcemaps.write('.', {
+        includeContent: false,
+        sourceRoot(file) {
+          return path.relative(file.path, __dirname);
+        }
+      })
+    )
     .pipe(gulp.dest('dist'))
 );
 
 // Start server with restart on file changes
 gulp.task('nodemon', ['copy', 'babel'], () => {
-  const debugArgument = semver.satisfies(process.versions.node, '>=7.0.0') ? '--inspect' : '--debug';
+  const debugArgument = semver.satisfies(process.versions.node, '>=7.0.0')
+    ? '--inspect'
+    : '--debug';
 
   return plugins.nodemon({
     script: path.join('dist', 'server.js'),
     nodeArgs: [debugArgument],
     ext: 'js',
     verbose: true,
-    ignore: ['node_modules/**/*.js', 'dist/**/*.js', 'doc/**', 'gulpfile.babel.js', 'uploads/*.png', '*.log'],
+    ignore: [
+      'node_modules/**/*.js',
+      'dist/**/*.js',
+      'doc/**',
+      'gulpfile.babel.js',
+      'uploads/*.png',
+      '*.log'
+    ],
     tasks: ['copy', 'babel']
   });
 });
@@ -66,9 +86,7 @@ gulp.task('serve', ['clean'], () => runSequence('nodemon'));
 
 // default task: clean dist, compile js files and copy non-js files.
 gulp.task('default', ['clean'], () => {
-  runSequence(
-    ['copy', 'babel']
-  );
+  runSequence(['copy', 'babel']);
 });
 
 // Drops the MongoDB database, used in e2e testing
@@ -83,7 +101,6 @@ gulp.task('dropdb', (done) => {
       } else {
         console.log('Successfully dropped db: ', db.databaseName); // eslint-disable-line
       }
-
       mongooseService.disconnect(done);
     });
   });
@@ -96,14 +113,17 @@ gulp.task('mocha', (done) => {
   let error;
 
   // Connect mongoose
-  mongooseService.connect(function (db) { // eslint-disable-line
-    gulp.src(testSuites)
-      .pipe(plugins.mocha({
-        ui: 'bdd',
-        reporter: 'spec',
-        timeout: 10000,
-        compilers: 'js:babel-core/register'
-      }))
+  mongooseService.connect(() => {
+    gulp
+      .src(testSuites)
+      .pipe(
+        plugins.mocha({
+          ui: 'bdd',
+          reporter: 'spec',
+          timeout: 10000,
+          compilers: 'js:babel-core/register'
+        })
+      )
       .on('error', (err) => {
         // If an error occurs, save it
         error = err;

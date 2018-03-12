@@ -21,7 +21,7 @@ function create(req, res, next) {
           name: req.body.name,
           image: {
             originalname: req.file.originalname,
-            path: process.env.NODE_ENV === 'production' ? req.file.url : req.file.path
+            path: process.env.NODE_ENV === 'test' ? req.file.path : req.file.location
           }
         });
         section.save()

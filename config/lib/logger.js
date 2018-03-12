@@ -40,7 +40,11 @@ logger.setupFileLogger = function setupFileLogger() {
   } catch (err) {
     if (process.env.NODE_ENV !== 'test') {
       console.log();
-      console.log(chalk.red('An error has occured during the creation of the File transport logger.'));
+      console.log(
+        chalk.red(
+          'An error has occured during the creation of the File transport logger.'
+        )
+      );
       console.log(chalk.red(err));
       console.log();
     }
@@ -53,12 +57,17 @@ logger.getLogOptions = function getLogOptions() {
   const _config = _.clone(config, true);
   const configFileLogger = _config.log.fileLogger;
 
-  if (!_.has(_config, 'log.fileLogger.directoryPath') || !_.has(_config, 'log.fileLogger.fileName')) {
+  if (
+    !_.has(_config, 'log.fileLogger.directoryPath') ||
+    !_.has(_config, 'log.fileLogger.fileName')
+  ) {
     console.log('unable to find logging file configuration');
     return false;
   }
 
-  const logPath = `${configFileLogger.directoryPath}/${configFileLogger.fileName}`;
+  const logPath = `${configFileLogger.directoryPath}/${
+    configFileLogger.fileName
+  }`;
 
   return {
     level: 'debug',
@@ -67,7 +76,7 @@ logger.getLogOptions = function getLogOptions() {
     timestamp: true,
     maxsize: configFileLogger.maxsize ? configFileLogger.maxsize : 10485760,
     maxFiles: configFileLogger.maxFiles ? configFileLogger.maxFiles : 2,
-    json: (_.has(configFileLogger, 'json')) ? configFileLogger.json : false,
+    json: _.has(configFileLogger, 'json') ? configFileLogger.json : false,
     eol: '\n',
     tailable: true,
     showLevel: true,
@@ -83,7 +92,8 @@ logger.getMorganOptions = function getMorganOptions() {
 };
 
 logger.getLogFormat = function getLogFormat() {
-  let format = config.log && config.log.format ? config.log.format.toString() : 'combined';
+  let format =
+    config.log && config.log.format ? config.log.format.toString() : 'combined';
 
   // make sure we have a valid format
   if (!_.includes(validFormats, format)) {
@@ -91,7 +101,11 @@ logger.getLogFormat = function getLogFormat() {
 
     if (process.env.NODE_ENV !== 'test') {
       console.log();
-      console.log(chalk.yellow(`Warning: An invalid format was provided. The logger will use the default format of "${format}"`));
+      console.log(
+        chalk.yellow(
+          `Warning: An invalid format was provided. The logger will use the default format of "${format}"`
+        )
+      );
       console.log();
     }
   }

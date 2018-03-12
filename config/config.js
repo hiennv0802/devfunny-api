@@ -7,7 +7,6 @@ import chalk from 'chalk';
 /* eslint-disable global-require, no-param-reassign*/
 const validateEnvironmentVariable = () => {
   const environmentFiles = glob.sync(`./config/env/${process.env.NODE_ENV}.js`);
-  console.log(); // eslint-disable-line
   if (!environmentFiles.length) {
     if (process.env.NODE_ENV) {
       console.error(chalk.red('+ Error: No configuration file found for "' + process.env.NODE_ENV + '" environment using development instead')); // eslint-disable-line
