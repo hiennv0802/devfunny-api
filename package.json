@@ -19,7 +19,8 @@
     "lint:watch": "yarn lint -- --watch",
     "gulp": "gulp",
     "ci:travis": "cross-env NODE_ENV=test npm run lint && npm run test:server",
-    "test:server": "gulp test:server"
+    "test:server": "gulp test:server",
+    "apidoc": "apidoc -i server/routes/ -o doc/"
   },
   "repository": {
     "type": "git",
