@@ -4,13 +4,6 @@ import APIError from '../helpers/APIError';
 import config from '../../config/config';
 import User from '../models/user.model';
 
-/**
- * Returns jwt token if valid email and password is provided
- * @param req
- * @param res
- * @param next
- * @returns {*}
- */
 function login(req, res, next) {
   User.findOne(
     {
