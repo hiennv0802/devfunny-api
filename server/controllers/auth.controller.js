@@ -31,7 +31,8 @@ function login(req, res, next) {
               email: user.email,
               username: user.username
             },
-            config.jwtSecret
+            config.jwtSecret,
+            { expiresIn: 86400 }
           );
 
           return res.json({
