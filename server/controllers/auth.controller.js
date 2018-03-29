@@ -27,9 +27,7 @@ function login(req, res, next) {
         if (isMatch) {
           const token = jwt.sign(
             {
-              _id: user._id,
-              email: user.email,
-              username: user.username
+              _id: user._id
             },
             config.jwtSecret,
             { expiresIn: 86400 }
