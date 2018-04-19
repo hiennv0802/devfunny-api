@@ -65,6 +65,7 @@
     "mv": "^2.1.1",
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
+    "passport-local": "^1.0.0",
     "request": "^2.81.0",
     "winston": "2.3.0",
     "yarn": "^0.27.5"

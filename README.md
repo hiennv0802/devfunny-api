@@ -1,49 +1,26 @@
 # dev-funny
+
 **Pre-Installation Requirements**
-- Install npm: https://docs.npmjs.com/getting-started/installing-node
 
-
-**Frontend(client)**
-
-Clone project:
-```
-git clone git@github.com:hienbx94/dev-funny.git
-```
-Check out develop branch
-```
-git checkout develop
-```
-Cd to frontend(client) folder and install package for angular 2
-```
-cd client && npm install
-```
-Run frontend(client) on http://localhost:8080
-```
-npm start
-```
+- Install node and npm with nvm: https://github.com/creationix/nvm
 
 **Server(nodejs)**
 
-Install yarn
-
-```
-npm install -g yarn
-```
 Install dependencies:
 ```
-yarn
+npm install
 ```
-Set environment (vars):
+Set environment variables:
 ```
 cp .env.example .env
 ```
 Start server:
 ```
 # Start server
-yarn start
+npm start
 
 or
 
 # Selectively set DEBUG env var to get logs
-DEBUG=dev-funny-api:* yarn start
+DEBUG=dev-funny-api:* npm start
 ```
