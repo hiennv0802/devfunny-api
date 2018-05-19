@@ -20,7 +20,7 @@
     "gulp": "gulp",
     "ci:travis": "cross-env NODE_ENV=test npm run lint && npm run test:server",
     "test:server": "gulp test:server",
-    "apidoc": "apidoc -i server/doc/ -o doc/"
+    "apidoc": "apidoc -i server/apidoc/ -o doc/"
   },
   "repository": {
     "type": "git",
