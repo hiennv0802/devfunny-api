@@ -27,6 +27,7 @@ DEBUG=dev-funny-api:* npm start
 
 **API doc**
 ```
+npm install -g apidoc
 npm run apidoc
 ```
 Open `doc/index.html` to view api doc.
