@@ -24,3 +24,9 @@ or
 # Selectively set DEBUG env var to get logs
 DEBUG=dev-funny-api:* npm start
 ```
+
+**API doc**
+```
+npm run apidoc
+```
+Open `doc/index.html` to view api doc.
