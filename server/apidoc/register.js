@@ -4,15 +4,15 @@
  * @apiGroup Signup
  * @apiName Signup with email
  *
- * @apiParam {String} social_type Type of signup(email, facebook, twitter)
  * @apiParam {String} email Email of user.
  * @apiParam {String} password Password of user.
+ * @apiParam {String} social_type Type of signup(email, facebook, twitter). In this case is email
  *
- * @apiSuccess {String} _id ID of user.
- * @apiSuccess {String} name Name of user.
- * @apiSuccess {String} email Email of user.
- * @apiSuccess {String} username Username of user.
- * @apiSuccess {String} social_id Social ID of user.
+ * @apiSuccess (Success 200) {String} _id ID of user.
+ * @apiSuccess (Success 200) {String} name Name of user.
+ * @apiSuccess (Success 200) {String} email Email of user.
+ * @apiSuccess (Success 200) {String} username Username of user.
+ * @apiSuccess (Success 200) {String} social_id Social ID of user.
  * @apiSuccessExample {json} Success-Response:
  *  {
  *    "__v": 0,
@@ -24,10 +24,9 @@
  *    "createdAt": "2017-06-02T10:02:43.475Z"
  *  }
  *
- * @apiError InternalServerError InternalServerError
- * @apiErrorExample {json} Error-Response:
+ * @apiError (Error 400) {String} password Password is required
+ * @apiErrorExample {json} Error-Response 400:
  *   {
- *     "message": "Internal Server Error",
- *      "stack": {}
+ *     "message": "password is required"
  *   }
  */
