@@ -73,6 +73,7 @@ gulp.task('nodemon', ['copy', 'babel'], () => {
       'node_modules/**/*.js',
       'dist/**/*.js',
       'doc/**',
+      'server/apidoc/**',
       'gulpfile.babel.js',
       'uploads/*.png',
       '*.log'
