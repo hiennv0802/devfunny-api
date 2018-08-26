@@ -1,4 +1,4 @@
-# dev-funny
+# dev-funny-api
 
 **Pre-Installation Requirements**
 
